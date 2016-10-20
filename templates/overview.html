@@ -31,10 +31,12 @@
                             <th>Memory Usage (Free/Used/Total)</th>
                             <th>Processes</th>
                             <th>Last Update</th>
+                            {% comment %}
                             <th>Current</th>
                             <th>Next</th>
                             <th title="People in the queue in front of you">Queue {% icon question-sign %}</th>
                             <th></th>
+                            {% endcomment %}
                         </tr>
                     </thead>
                     <tbody style="background-color: #fff;">
@@ -52,6 +54,8 @@
                                       {% endif %}
                                     </td>
                                     <td>{{ gpu.last_updated }}{% if gpu.last_update_too_long_ago %} {% icon exclamation-sign %} {% endif %}</td>
+                                    {% comment %}
+
                                     <td>{{ gpu|current_reservation }}</td>
                                     <td>{{ gpu|next_reservation }}</td>
                                     {% with queue_position=gpu|queue_position:user %}
@@ -70,6 +74,8 @@
                                             {% endif %}
                                         </td>
                                     {% endwith %}
+                                    {% endcomment %}
+
                                 </tr>
                             {% endfor %}
                         {% endfor %}
@@ -98,10 +104,10 @@
          $('#overview-table').DataTable({
              responsive: true,
              "columnDefs": [
-                {"orderable": false, "targets": [6, 7]}
+                {"targets": [4], "orderable": false}
              ]
          });
-
+        {% comment %}
          $(".reserve-btn").on('click', function (event) {
             $.post(
               "{% url "reserve" %}",
@@ -115,6 +121,7 @@
               alert( "Error, reservation failed. Please contact maintainers." );
             });
          });
+        {% endcomment %}
 
          setTimeout(refreshPage, 300000);
      });
