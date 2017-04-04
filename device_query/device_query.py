@@ -47,7 +47,7 @@ class DeviceQueryHandler(BaseHTTPRequestHandler):
         output = subprocess.check_output("top -b -n{}".format(n_frames).split()).decode('utf-8')
         lines = [l.replace(",", ".").split() for l in output.split("\n") if "Cpu(s)" in l]
         lines = [float(l[1]) + float(l[3]) for l in lines]
-        return sum(lines) / n_frames
+        return lines[-1]
 
 
     def do_GET(self):
