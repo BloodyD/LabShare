@@ -26,6 +26,7 @@
                 <table class="table table-hover" id="overview-table">
                     <thead>
                         <tr>
+                            <th>Load</th>
                             <th>Device</th>
                             <th>GPU</th>
                             <th>Memory Usage (Free/Used/Total)</th>
@@ -43,6 +44,7 @@
                         {% for device in devices %}
                             {% for gpu in device.gpus.all %}
                                 <tr {% if gpu.in_use %}class="warning"{% endif %}>
+                                    <td>{{ device.cpu_util }} %</td>
                                     <td>{{ device.name }}</td>
                                     <td>{{ gpu.model_name }}</td>
                                     <td>{{ gpu.free_memory }} / {{ gpu.used_memory }} / {{ gpu.total_memory }}</td>

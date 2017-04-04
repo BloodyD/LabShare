@@ -43,14 +43,22 @@ class DeviceQueryHandler(BaseHTTPRequestHandler):
             })
         return gpu_data
 
+    def cpu_util(self, n_frames=2):
+        output = subprocess.check_output("top -b -n{}".format(n_frames).split()).decode('utf-8')
+        lines = [l.replace(",", ".").split() for l in output.split("\n") if "Cpu(s)" in l]
+        lines = [float(l[1]) + float(l[3]) for l in lines]
+        return sum(lines) / n_frames
+
+
     def do_GET(self):
         try:
             raw_gpu_data = subprocess.check_output(["nvidia-smi", "-x", "-q"]).decode('utf-8')
             gpu_data = self.parse_nvidia_xml(raw_gpu_data)
+            cpu_util = self.cpu_util()
             self.send_response(200)
             self.send_header("Content-type", "application/json")
             self.end_headers()
-            self.wfile.write(bytes(json.dumps(gpu_data, indent=4), 'utf-8'))
+            self.wfile.write(bytes(json.dumps(dict(gpus=gpu_data, cpu_util=cpu_util), indent=4), 'utf-8'))
         except Exception as e:
             self.send_error(500, explain = str(e))
 

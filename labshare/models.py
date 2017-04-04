@@ -7,6 +7,7 @@ from datetime import timedelta
 
 class Device(models.Model):
     name = models.CharField(max_length=255)
+    cpu_util = models.FloatField(default=0)
     ip_address = models.GenericIPAddressField()
 
     def __str__(self):
