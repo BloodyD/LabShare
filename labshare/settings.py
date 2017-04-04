@@ -11,9 +11,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 't&f&k54m3j^*vm8wgc2r&$aq47&dq-(b!!9tng))r2#zzr&un%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+"127.0.0.1",
+"hera.inf-cv.uni-jena.de",
+]
 
 
 # Application definition
@@ -43,6 +46,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -62,10 +66,12 @@ TEMPLATES = [
         },
     },
 ]
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-)
+if DEBUG:
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, "static"),
+    )
+else:
+    STATIC_ROOT=os.path.join(BASE_DIR, "media")
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases

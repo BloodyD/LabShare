@@ -1,8 +1,12 @@
-from urllib.error import URLError
+try:
+     from urllib.error import URLError
+     from urllib.request import urlopen
+except ImportError:
+     from urllib2 import URLError, urlopen
+
 from django.core.management import BaseCommand
 from labshare.models import Device, GPU, GPUProcess
 
-import urllib.request
 import json
 
 
@@ -13,7 +17,7 @@ class Command(BaseCommand):
         for device in Device.objects.all():
             try:
                 ip_address = device.ip_address
-                response = urllib.request.urlopen("http://{}:12000".format(ip_address), timeout=10).read().decode('utf-8')
+                response = urlopen("http://{}:12000".format(ip_address), timeout=10).read().decode('utf-8')
                 content = json.loads(response)
                 gpus = content["gpus"]
                 cpu_util = content["cpu_util"]
